@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    env_file: ./.env
+    ports:
+      - $DB_OUTSIDE_PORT:$DB_INSIDE_PORT
+    environment:
+      POSTGRES_USER: $DB_USER
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_NAME
+      
+  server:
+    build: ./server
+    ports:
+      - $SERVER_OUTSIDE_PORT:$SERVER_INSIDE_PORT
+    depends_on:
+      - db
+volumes:
+  db-data:
